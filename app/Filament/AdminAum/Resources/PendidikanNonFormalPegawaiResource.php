@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Pegawai\Resources;
+namespace App\Filament\AdminAum\Resources;
 
-use App\Filament\Pegawai\Resources\PendidikanNonFormalResource\Pages;
-use App\Filament\Pegawai\Resources\PendidikanNonFormalResource\RelationManagers;
+use App\Filament\AdminAum\Resources\PendidikanNonFormalPegawaiResource\Pages;
+use App\Filament\AdminAum\Resources\PendidikanNonFormalPegawaiResource\RelationManagers;
 use App\Models\PendidikanNonFormal;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -11,57 +11,44 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
-class PendidikanNonFormalResource extends Resource
+class PendidikanNonFormalPegawaiResource extends Resource
 {
     protected static ?string $model = PendidikanNonFormal::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $modelLabel = 'Pendidikan Non Formal';
-    protected static ?string $pluralModelLabel = 'Pendidikan Non Formal';
+    protected static ?string $modelLabel = 'Pendidikan Formal Non Anggota';
+    protected static ?string $pluralModelLabel = 'Pendidikan Non Formal Anggota';
 
     public static function getLabel(): ?string
     {
-        return 'Pendidikan Non Formal';
+        return 'Pendidikan Non Formal Anggota';
     }
 
     public static function getPluralLabel(): ?string
     {
-        return 'Pendidikan Non Formal';
+        return 'Pendidikan Non Formal Anggota';
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return false;
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
     }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('lembagaPenyelenggara')
-                    ->label('Lembaga Penyelenggara')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('namaKursus')
-                    ->label('Nama Kursus')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('tingkat')
-                    ->label('Tingkat')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('tahunLulus')
-                    ->label('Tahun Lulus')
-                    ->numeric()
-                    ->minValue(1900)
-                    ->maxValue(date('Y'))
-                    ->required(),
-                Forms\Components\FileUpload::make('sertifikat')
-                    ->label('Sertifikat')
-                    ->disk('local')
-                    ->directory('sertifikat')
-                    ->acceptedFileTypes(['application/pdf'])
-                    ->maxSize(4096) // dalam kilobyte, 4096 KB = 4 MB
-                    ->required(),
+                //
             ]);
     }
 
@@ -69,6 +56,7 @@ class PendidikanNonFormalResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('pegawai.name')->label('Nama')->searchable(),
                 Tables\Columns\TextColumn::make('lembagaPenyelenggara')->label('Lembaga Penyelenggara')->searchable(),
                 Tables\Columns\TextColumn::make('namaKursus')->label('Nama Kursus')->searchable(),
                 Tables\Columns\TextColumn::make('tingkat')->label('Tingkat'),
@@ -83,14 +71,18 @@ class PendidikanNonFormalResource extends Resource
                     ->openUrlInNewTab()
                     ->toggleable(),
             ])
+            ->filters([
+                //
+            ])
             ->query(function () {
-                $idUser = Auth::guard('pegawais')->id();
-                return PendidikanNonFormal::query()->where('id_pegawai', $idUser);
+                $idAum = Auth::guard('admin-aums')->user()->id_aum;
+                return PendidikanNonFormal::query()
+                    ->whereHas('pegawai', function ($query) use ($idAum) {
+                        $query->where('id_aum', $idAum);
+                    });
             })
-            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([]);
     }
@@ -105,9 +97,9 @@ class PendidikanNonFormalResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPendidikanNonFormals::route('/'),
-            'create' => Pages\CreatePendidikanNonFormal::route('/create'),
-            'edit' => Pages\EditPendidikanNonFormal::route('/{record}/edit'),
+            'index' => Pages\ListPendidikanNonFormalPegawais::route('/'),
+            'create' => Pages\CreatePendidikanNonFormalPegawai::route('/create'),
+            'edit' => Pages\EditPendidikanNonFormalPegawai::route('/{record}/edit'),
         ];
     }
 }

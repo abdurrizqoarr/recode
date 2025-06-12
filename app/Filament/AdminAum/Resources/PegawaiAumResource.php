@@ -15,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class PegawaiAumResource extends Resource
 {
@@ -75,6 +76,10 @@ class PegawaiAumResource extends Resource
                     ->sortable()
                     ->limit(50),
             ])
+            ->query(function () {
+                $idAum = Auth::guard('admin-aums')->user()->id_aum;
+                return PegawaiAum::query()->where('id_aum', $idAum);
+            })
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),

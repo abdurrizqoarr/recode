@@ -35,6 +35,21 @@ class Profile extends Model
         return $this->belongsTo(PegawaiAum::class, 'id_pegawai', 'id');
     }
 
+    protected static function booted(): void
+    {
+        // Daftarkan sebuah event listener yang akan berjalan SEBELUM record dihapus.
+        // Kita menggunakan "deleting" bukan "deleted".
+        static::deleting(function (RiwayatPekerjaan $riwayatPekerjaan) {
+            // Ambil profile terkait
+            $profile = Profile::where('id_pegawai', $riwayatPekerjaan->id_pegawai)->first();
+
+            // Jika profile ditemukan, kurangi total masa kerjanya
+            if ($profile) {
+                $profile->decrement('totalMasaKerja', $riwayatPekerjaan->masaKerjaDalamBulan);
+            }
+        });
+    }
+
     protected function casts(): array
     {
         return [

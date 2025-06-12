@@ -3,17 +3,16 @@
 namespace App\Filament\Pegawai\Pages;
 
 use App\Models\Profile as ModelsProfile;
+use App\Models\RiwayatPekerjaan;
 use Filament\Forms\Components\Grid;
-<<<<<<< HEAD
-=======
 use Filament\Forms\Components\Toggle;
->>>>>>> 00b5c6a (initial commit)
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class Profile extends Page implements HasForms
 {
@@ -57,8 +56,13 @@ class Profile extends Page implements HasForms
                         \Filament\Forms\Components\TextInput::make('tempatLahir')
                             ->label('Tempat Lahir')
                             ->required(),
-                        Toggle::make('isMarried')
+                        \Filament\Forms\Components\Radio::make('isMarried')
                             ->label('Sudah Menikah')
+                            ->options([
+                                true => 'Ya',
+                                false => 'Tidak',
+                            ])
+                            ->boolean()
                             ->default(false),
                         \Filament\Forms\Components\Select::make('jenisKelamin')
                             ->label('Jenis Kelamin')
@@ -70,11 +74,6 @@ class Profile extends Page implements HasForms
                         \Filament\Forms\Components\DatePicker::make('tanggalLahir')
                             ->label('Tanggal Lahir')
                             ->required(),
-<<<<<<< HEAD
-                        \Filament\Forms\Components\Toggle::make('isMarried')
-                            ->label('Sudah Menikah'),
-=======
->>>>>>> 00b5c6a (initial commit)
                         \Filament\Forms\Components\Textarea::make('alamat')
                             ->label('Alamat')
                             ->required()
@@ -82,27 +81,15 @@ class Profile extends Page implements HasForms
                         \Filament\Forms\Components\FileUpload::make('fotoProfile')
                             ->label('Foto Profil')
                             ->image()
-<<<<<<< HEAD
-                            ->directory('profile-photos')
-=======
                             ->disk('public')
                             ->previewable()
                             ->directory('profile-photos')
                             ->maxSize(3072) // maksimal 3MB (dalam kilobyte)
->>>>>>> 00b5c6a (initial commit)
                             ->nullable(),
                         \Filament\Forms\Components\TextInput::make('noTelp')
                             ->label('No. Telepon')
                             ->tel()
                             ->nullable(),
-<<<<<<< HEAD
-                        \Filament\Forms\Components\TextInput::make('totalMasaKerja')
-                            ->label('Total Masa Kerja')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
-=======
->>>>>>> 00b5c6a (initial commit)
                     ])
                 ])
         ])->statePath('data');
@@ -111,15 +98,17 @@ class Profile extends Page implements HasForms
     public function submit()
     {
         try {
-            dd($this->form->getState());
             $user = Auth::guard('pegawais')->user();
 
+            $totalMasaKerja = RiwayatPekerjaan::where('id_pegawai', $user->id)
+                ->sum('masaKerjaDalamBulan');
+
             ModelsProfile::updateOrCreate(
-                ['id_pegawai' => $user->id],
-                array_merge(
-                    $this->form->getState(),
-                    ['id_pegawai' => $user->id]
-                )
+                ['id_pegawai' => $user->id], // Kunci untuk mencari
+                [
+                    ...$this->form->getState(), // Data dari form
+                    'totalMasaKerja' => $totalMasaKerja, // Data hasil kalkulasi
+                ]
             );
 
             Notification::make()
@@ -128,11 +117,13 @@ class Profile extends Page implements HasForms
                 ->success()
                 ->send();
         } catch (\Throwable $e) {
+            // 4. Tangani error dengan aman
+            Log::error('Gagal memperbarui profil pegawai: ' . $e->getMessage(), ['user_id' => $user->id ?? null]);
+
             Notification::make()
-                ->title('Terjadi kesalahan saat menyimpan data')
-                ->body($e->getMessage())
+                ->title('Terjadi Kesalahan')
+                ->body('Tidak dapat menyimpan perubahan. Silakan coba beberapa saat lagi.')
                 ->danger()
-                ->duration(5000)
                 ->send();
         }
     }
