@@ -27,7 +27,10 @@ class Aum extends Model
         'izinTambahPegawai',
     ];
 
-    protected $casts = [
-        'izinTambahPegawai' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'izinTambahPegawai' => 'boolean',
+        ];
+    }
 }

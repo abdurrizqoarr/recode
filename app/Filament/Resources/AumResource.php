@@ -9,6 +9,7 @@ use App\Models\Aum;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
 use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -69,9 +70,10 @@ class AumResource extends Resource
                     ->label('Logo Aum')
                     ->image()
                     ->directory('logos')
-                    ->maxSize(1024)
+                    ->disk('public')
+                    ->maxSize(3072)
                     ->previewable(),
-                Forms\Components\Toggle::make('izinTambahPegawai')
+                Toggle::make('izinTambahPegawai')
                     ->label('Izin Tambah Pegawai')
                     ->default(true),
             ]);

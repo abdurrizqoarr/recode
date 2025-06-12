@@ -4,6 +4,10 @@ namespace App\Filament\Pegawai\Pages;
 
 use App\Models\Profile as ModelsProfile;
 use Filament\Forms\Components\Grid;
+<<<<<<< HEAD
+=======
+use Filament\Forms\Components\Toggle;
+>>>>>>> 00b5c6a (initial commit)
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -53,6 +57,9 @@ class Profile extends Page implements HasForms
                         \Filament\Forms\Components\TextInput::make('tempatLahir')
                             ->label('Tempat Lahir')
                             ->required(),
+                        Toggle::make('isMarried')
+                            ->label('Sudah Menikah')
+                            ->default(false),
                         \Filament\Forms\Components\Select::make('jenisKelamin')
                             ->label('Jenis Kelamin')
                             ->options([
@@ -63,8 +70,11 @@ class Profile extends Page implements HasForms
                         \Filament\Forms\Components\DatePicker::make('tanggalLahir')
                             ->label('Tanggal Lahir')
                             ->required(),
+<<<<<<< HEAD
                         \Filament\Forms\Components\Toggle::make('isMarried')
                             ->label('Sudah Menikah'),
+=======
+>>>>>>> 00b5c6a (initial commit)
                         \Filament\Forms\Components\Textarea::make('alamat')
                             ->label('Alamat')
                             ->required()
@@ -72,17 +82,27 @@ class Profile extends Page implements HasForms
                         \Filament\Forms\Components\FileUpload::make('fotoProfile')
                             ->label('Foto Profil')
                             ->image()
+<<<<<<< HEAD
                             ->directory('profile-photos')
+=======
+                            ->disk('public')
+                            ->previewable()
+                            ->directory('profile-photos')
+                            ->maxSize(3072) // maksimal 3MB (dalam kilobyte)
+>>>>>>> 00b5c6a (initial commit)
                             ->nullable(),
                         \Filament\Forms\Components\TextInput::make('noTelp')
                             ->label('No. Telepon')
                             ->tel()
                             ->nullable(),
+<<<<<<< HEAD
                         \Filament\Forms\Components\TextInput::make('totalMasaKerja')
                             ->label('Total Masa Kerja')
                             ->numeric()
                             ->default(0)
                             ->required(),
+=======
+>>>>>>> 00b5c6a (initial commit)
                     ])
                 ])
         ])->statePath('data');

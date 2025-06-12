@@ -35,7 +35,10 @@ class Profile extends Model
         return $this->belongsTo(PegawaiAum::class, 'id_pegawai', 'id');
     }
 
-    protected $casts = [
-        'isMarried' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'isMarried' => 'boolean',
+        ];
+    }
 }
