@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class RiwayatPekerjaanResource extends Resource
 {
@@ -59,8 +60,11 @@ class RiwayatPekerjaanResource extends Resource
                     ->openUrlInNewTab()
                     ->toggleable(),
             ])
-            ->filters([
-            ])
+            ->query(function () {
+                $idUser = Auth::guard('pegawais')->id();
+                return RiwayatPekerjaan::query()->where('id_pegawai', $idUser);
+            })
+            ->filters([])
             ->actions([
                 Tables\Actions\DeleteAction::make(),
             ])

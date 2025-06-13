@@ -80,19 +80,20 @@ class RiwayatPekerjaanCreate extends CreateRecord
         return $data;
     }
 
-    protected function afterCreate(RiwayatPekerjaan $record): void
+    protected function handleRecordCreation(array $data): RiwayatPekerjaan
     {
-        // $record adalah instance dari model RiwayatPekerjaan yang baru saja dibuat.
+        // Buat record RiwayatPekerjaan
+        $record = RiwayatPekerjaan::create($data);
 
-        // Hanya update profile jika masa kerja lebih dari 0
+        // Tambahkan logika update Profile di sini
         if ($record->masaKerjaDalamBulan > 0) {
-            // Ambil profile berdasarkan id_pegawai dari record yang baru dibuat.
             $profile = Profile::where('id_pegawai', $record->id_pegawai)->first();
 
             if ($profile) {
-                // Gunakan increment untuk operasi yang lebih aman dan efisien
                 $profile->increment('totalMasaKerja', $record->masaKerjaDalamBulan);
             }
         }
+
+        return $record;
     }
 }

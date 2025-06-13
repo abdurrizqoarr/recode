@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('masaKerjaDalamBulan');
             $table->date('tanggalSK');
             $table->string('buktiSK');
-            $table->uuid('id_pegawai')->unique();
+            $table->uuid('id_pegawai');
 
             $table->timestamps();
 

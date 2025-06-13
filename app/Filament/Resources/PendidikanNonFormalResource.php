@@ -1,47 +1,51 @@
 <?php
 
-namespace App\Filament\AdminAum\Resources;
+namespace App\Filament\Resources;
 
-use App\Filament\AdminAum\Resources\PendidikanNonFormalPegawaiResource\Pages;
-use App\Filament\AdminAum\Resources\PendidikanNonFormalPegawaiResource\RelationManagers;
+use App\Filament\Exports\PendidikanNonFormalExporter;
+use App\Filament\Resources\PendidikanNonFormalResource\Pages;
+use App\Filament\Resources\PendidikanNonFormalResource\RelationManagers;
 use App\Models\PendidikanNonFormal;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Auth;
 
-class PendidikanNonFormalPegawaiResource extends Resource
+class PendidikanNonFormalResource extends Resource
 {
     protected static ?string $model = PendidikanNonFormal::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $modelLabel = 'Pendidikan Formal Non Anggota';
-    protected static ?string $pluralModelLabel = 'Pendidikan Non Formal Anggota';
+    protected static ?string $navigationLabel = 'Pendidikan Non Formal';
+
+    protected static ?string $modelLabel = 'Pendidikan Non Formal';
+    protected static ?string $pluralModelLabel = 'Pendidikan Non Formal';
 
     public static function getLabel(): ?string
     {
-        return 'Pendidikan Non Formal Anggota';
+        return 'Pendidikan Non Formal';
     }
 
     public static function getPluralLabel(): ?string
     {
-        return 'Pendidikan Non Formal Anggota';
-    }
-
-    public static function canEdit(Model $record): bool
-    {
-        return false;
+        return 'Pendidikan Non Formal';
     }
 
     public static function canCreate(): bool
     {
         return false;
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return false; // Disable editing for this resource
     }
 
     public static function form(Form $form): Form
@@ -55,8 +59,16 @@ class PendidikanNonFormalPegawaiResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(PendidikanNonFormalExporter::class)
+                    ->formats([
+                        ExportFormat::Xlsx,
+                    ]),
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('pegawai.name')->label('Nama')->searchable(),
+                Tables\Columns\TextColumn::make('pegawai.aum.namaAum')->label('Asal AUM')->sortable(),
                 Tables\Columns\TextColumn::make('lembagaPenyelenggara')->label('Lembaga Penyelenggara')->searchable(),
                 Tables\Columns\TextColumn::make('namaKursus')->label('Nama Kursus')->searchable(),
                 Tables\Columns\TextColumn::make('tingkat')->label('Tingkat'),
@@ -74,13 +86,6 @@ class PendidikanNonFormalPegawaiResource extends Resource
             ->filters([
                 //
             ])
-            ->query(function () {
-                $idAum = Auth::guard('admin-aums')->user()->id_aum;
-                return PendidikanNonFormal::query()
-                    ->whereHas('pegawai', function ($query) use ($idAum) {
-                        $query->where('id_aum', $idAum);
-                    });
-            })
             ->actions([
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -97,9 +102,9 @@ class PendidikanNonFormalPegawaiResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPendidikanNonFormalPegawais::route('/'),
-            'create' => Pages\CreatePendidikanNonFormalPegawai::route('/create'),
-            'edit' => Pages\EditPendidikanNonFormalPegawai::route('/{record}/edit'),
+            'index' => Pages\ListPendidikanNonFormals::route('/'),
+            'create' => Pages\CreatePendidikanNonFormal::route('/create'),
+            'edit' => Pages\EditPendidikanNonFormal::route('/{record}/edit'),
         ];
     }
 }

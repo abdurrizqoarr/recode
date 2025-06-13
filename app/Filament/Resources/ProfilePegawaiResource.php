@@ -2,14 +2,17 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Exports\ProfileExporter;
 use App\Filament\Resources\ProfilePegawaiResource\Pages;
 use App\Filament\Resources\ProfilePegawaiResource\RelationManagers;
 use App\Models\Profile;
 use App\Models\ProfilePegawai;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -49,14 +52,78 @@ class ProfilePegawaiResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([]);
+            ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->label('Nama Pegawai')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('aum')
+                    ->label('Nama Pegawai')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('noKTAM')
+                    ->label('No. KTAM')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('noKTP')
+                    ->label('No. KTP')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('noNIPY')
+                    ->label('No. NIPY')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                Forms\Components\TextInput::make('tempatLahir')
+                    ->label('Tempat Lahir')
+                    ->required(),
+                Forms\Components\Select::make('jenisKelamin')
+                    ->label('Jenis Kelamin')
+                    ->options([
+                        'Laki - Laki' => 'Laki - Laki',
+                        'Perempuan' => 'Perempuan',
+                    ])
+                    ->required(),
+                Forms\Components\DatePicker::make('tanggalLahir')
+                    ->label('Tanggal Lahir')
+                    ->required(),
+                Forms\Components\Radio::make('isMarried')
+                    ->label('Status Menikah')
+                    ->options([
+                        1 => 'Menikah',
+                        0 => 'Belum Menikah',
+                    ])
+                    ->required(),
+                Forms\Components\Textarea::make('alamat')
+                    ->label('Alamat')
+                    ->required(),
+                Forms\Components\FileUpload::make('fotoProfile')
+                    ->label('Foto')
+                    ->image()
+                    ->directory('profile-photos')
+                    ->imageCropAspectRatio('1:1')
+                    ->imagePreviewHeight('100')
+                    ->maxSize(2048),
+                Forms\Components\TextInput::make('noTelp')
+                    ->label('No. Telp'),
+                Forms\Components\TextInput::make('totalMasaKerja')
+                    ->label('Total Masa Kerja')
+                    ->required(),
+            ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    ->exporter(ProfileExporter::class)
+                    ->formats([
+                        ExportFormat::Xlsx,
+                    ]),
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('pegawaiAum.name')->label('Nama')->searchable(),
+                Tables\Columns\TextColumn::make('pegawaiAum.aum.namaAum')->label('Asal AUM')->sortable(),
                 Tables\Columns\TextColumn::make('noKTAM')->label('No. KTAM')->searchable(),
                 Tables\Columns\TextColumn::make('noKTP')->label('No. KTP')->searchable(),
                 Tables\Columns\TextColumn::make('noNIPY')->label('No. NIPY')->searchable(),
@@ -78,7 +145,7 @@ class ProfilePegawaiResource extends Resource
                     ->searchable(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -90,7 +157,7 @@ class ProfilePegawaiResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with(['pegawaiAum.name']);
+            ->with(['pegawaiAum.aum']);
     }
 
     public static function getRelations(): array
@@ -104,6 +171,7 @@ class ProfilePegawaiResource extends Resource
     {
         return [
             'index' => Pages\ListProfilePegawais::route('/'),
+            'view' => Pages\ViewProfile::route('/{record}'),
         ];
     }
 }

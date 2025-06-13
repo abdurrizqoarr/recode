@@ -99,8 +99,6 @@ class ProfilePegawaiResource extends Resource
                     ->label('No. Telp'),
                 Forms\Components\TextInput::make('totalMasaKerja')
                     ->label('Total Masa Kerja')
-                    ->numeric()
-                    ->default(0)
                     ->required(),
             ]);
     }

@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Filament\AdminAum\Resources\ProfilePegawaiResource\Pages;
+namespace App\Filament\Resources\ProfilePegawaiResource\Pages;
 
-use App\Filament\AdminAum\Resources\ProfilePegawaiResource;
+use App\Filament\Resources\ProfilePegawaiResource;
 use Filament\Actions;
-use Filament\Forms\Form;
 use Filament\Resources\Pages\ViewRecord;
 
-class DetailProfileAnggota extends ViewRecord
+class ViewProfile extends ViewRecord
 {
     protected static string $resource = ProfilePegawaiResource::class;
 
@@ -19,7 +18,7 @@ class DetailProfileAnggota extends ViewRecord
     public function mount(int|string $record): void
     {
         // Ambil record Profile beserta relasi anggota dan ranting-nya
-        $this->record = \App\Models\Profile::with(['pegawaiAum'])->findOrFail($record);
+        $this->record = \App\Models\Profile::with(['pegawaiAum.aum'])->findOrFail($record);
 
         $this->authorizeAccess();
 
@@ -31,6 +30,7 @@ class DetailProfileAnggota extends ViewRecord
     {
         $record = $this->getRecord();
 
+        // Hitung totalMasaKerja dalam tahun dan bulan
         $totalMasaKerja = $record->totalMasaKerja ?? 0; // diasumsikan dalam bulan
         $tahun = floor($totalMasaKerja / 12);
         $bulan = $totalMasaKerja % 12;
@@ -38,6 +38,7 @@ class DetailProfileAnggota extends ViewRecord
 
         $this->form->fill([
             'name' => $record->pegawaiAum->name,
+            'aum' => $record->pegawaiAum->aum->namaAum,
             'noKTAM' => $record->noKTAM,
             'noKTP' => $record->noKTP,
             'noNIPY' => $record->noNIPY,
