@@ -2,13 +2,20 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class PegawaiAum extends Authenticatable
+class PegawaiAum extends Authenticatable implements FilamentUser
 {
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
+    }
+
     use HasFactory, Notifiable, HasUuids;
 
     protected $table = 'pegawai_aum';
@@ -16,6 +23,7 @@ class PegawaiAum extends Authenticatable
     protected $fillable = [
         'id_aum',
         'name',
+        'status',
         'username',
         'password',
     ];

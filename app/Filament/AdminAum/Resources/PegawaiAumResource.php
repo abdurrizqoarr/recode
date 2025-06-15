@@ -3,18 +3,13 @@
 namespace App\Filament\AdminAum\Resources;
 
 use App\Filament\AdminAum\Resources\PegawaiAumResource\Pages;
-use App\Filament\AdminAum\Resources\PegawaiAumResource\RelationManagers;
-use App\Models\Aum;
 use App\Models\PegawaiAum;
-use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
 class PegawaiAumResource extends Resource
@@ -44,13 +39,27 @@ class PegawaiAumResource extends Resource
                 TextInput::make('name')
                     ->label('Name')
                     ->required()
+                    ->minLength(2)
                     ->maxLength(240)
                     ->unique(ignoreRecord: true),
                 TextInput::make('username')
                     ->label('Username')
                     ->required()
+                    ->minLength(2)
                     ->maxLength(240)
                     ->unique(ignoreRecord: true),
+                Select::make('status')
+                    ->label('Status')
+                    ->required()
+                    ->options([
+                        'Pegawai Tetap Yayasan' => 'Pegawai Tetap Yayasan',
+                        'Guru Tetap Yayasan' => 'Guru Tetap Yayasan',
+                        'Pegawai Kontrak Yayasan' => 'Pegawai Kontrak Yayasan',
+                        'Guru Kontrak Yayasan' => 'Guru Kontrak Yayasan',
+                        'Guru Honor Sekolah' => 'Guru Honor Sekolah',
+                        'Tenaga Honor Sekolah' => 'Tenaga Honor Sekolah',
+                        'Guru Tamu' => 'Guru Tamu',
+                    ]),
                 TextInput::make('password')
                     ->label('Password')
                     ->password()
@@ -68,13 +77,13 @@ class PegawaiAumResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->label('Name')
                     ->searchable()
-                    ->sortable()
-                    ->limit(50),
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->label('status'),
                 Tables\Columns\TextColumn::make('username')
                     ->label('Username')
                     ->searchable()
-                    ->sortable()
-                    ->limit(50),
+                    ->sortable(),
             ])
             ->query(function () {
                 $idAum = Auth::guard('admin-aums')->user()->id_aum;

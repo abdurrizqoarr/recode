@@ -1,11 +1,12 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Livewire\HomePage;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/get-rekap-per-aum', [HomeController::class, 'rekapAum']);
 
 Route::get('/download/{filename}', function ($path) {
     // Hindari path traversal (keamanan)

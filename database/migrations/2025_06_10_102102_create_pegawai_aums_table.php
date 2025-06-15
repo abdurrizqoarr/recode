@@ -17,6 +17,15 @@ return new class extends Migration
             $table->string('name');
             $table->string('username')->unique();
             $table->string('password');
+            $table->enum('status', [
+                'Pegawai Tetap Yayasan',
+                'Guru Tetap Yayasan',
+                'Pegawai Kontrak Yayasan',
+                'Guru Kontrak Yayasan',
+                'Guru Honor Sekolah',
+                'Tenaga Honor Sekolah',
+                'Guru Tamu'
+            ]);
             $table->rememberToken();
             $table->timestamps();
 

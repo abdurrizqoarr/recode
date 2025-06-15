@@ -49,7 +49,7 @@ class RiwayatPekerjaanResource extends Resource
                 Tables\Columns\TextColumn::make('jabatanPenandaTangan')->label('Jabatan Penandatangan')->searchable(),
                 Tables\Columns\TextColumn::make('nomerSK')->label('Nomor SK')->searchable(),
                 Tables\Columns\TextColumn::make('masaKerjaDalamBulan')->label('Masa Kerja (Bulan)'),
-                Tables\Columns\TextColumn::make('tanggalSK')->label('Tanggal SK'),
+                Tables\Columns\TextColumn::make('tanggalSK')->label('Tanggal SK')->alignCenter(),
                 Tables\Columns\TextColumn::make('buktiSK')
                     ->alignCenter()
                     ->label('SK')

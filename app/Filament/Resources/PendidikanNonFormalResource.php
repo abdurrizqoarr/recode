@@ -4,18 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Exports\PendidikanNonFormalExporter;
 use App\Filament\Resources\PendidikanNonFormalResource\Pages;
-use App\Filament\Resources\PendidikanNonFormalResource\RelationManagers;
 use App\Models\PendidikanNonFormal;
 use Filament\Actions\Exports\Enums\ExportFormat;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PendidikanNonFormalResource extends Resource
 {
@@ -84,7 +80,11 @@ class PendidikanNonFormalResource extends Resource
                     ->toggleable(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('aum')
+                    ->label('AUM')
+                    ->relationship('pegawai.aum', 'namaAum')
+                    ->options(\App\Models\Aum::all()->pluck('namaAum', 'id'))
+                    ->searchable()
             ])
             ->actions([
                 Tables\Actions\DeleteAction::make(),
@@ -103,8 +103,6 @@ class PendidikanNonFormalResource extends Resource
     {
         return [
             'index' => Pages\ListPendidikanNonFormals::route('/'),
-            'create' => Pages\CreatePendidikanNonFormal::route('/create'),
-            'edit' => Pages\EditPendidikanNonFormal::route('/{record}/edit'),
         ];
     }
 }

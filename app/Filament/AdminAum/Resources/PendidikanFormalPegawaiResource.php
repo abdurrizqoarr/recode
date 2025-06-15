@@ -3,17 +3,12 @@
 namespace App\Filament\AdminAum\Resources;
 
 use App\Filament\AdminAum\Resources\PendidikanFormalPegawaiResource\Pages;
-use App\Filament\AdminAum\Resources\PendidikanFormalPegawaiResource\RelationManagers;
 use App\Models\PendidikanFormal;
-use App\Models\PendidikanFormalPegawai;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
 class PendidikanFormalPegawaiResource extends Resource
@@ -113,8 +108,6 @@ class PendidikanFormalPegawaiResource extends Resource
     {
         return [
             'index' => Pages\ListPendidikanFormalPegawais::route('/'),
-            'create' => Pages\CreatePendidikanFormalPegawai::route('/create'),
-            'edit' => Pages\EditPendidikanFormalPegawai::route('/{record}/edit'),
         ];
     }
 }

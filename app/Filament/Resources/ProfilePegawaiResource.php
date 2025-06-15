@@ -4,19 +4,19 @@ namespace App\Filament\Resources;
 
 use App\Filament\Exports\ProfileExporter;
 use App\Filament\Resources\ProfilePegawaiResource\Pages;
-use App\Filament\Resources\ProfilePegawaiResource\RelationManagers;
+use App\Filament\Resources\ProfilePegawaiResource\Pages\CreateTugasMapel;
+use App\Filament\Resources\ProfilePegawaiResource\Pages\CreateTugasTambahan;
 use App\Models\Profile;
-use App\Models\ProfilePegawai;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProfilePegawaiResource extends Resource
 {
@@ -102,7 +102,7 @@ class ProfilePegawaiResource extends Resource
                     ->directory('profile-photos')
                     ->imageCropAspectRatio('1:1')
                     ->imagePreviewHeight('100')
-                    ->maxSize(2048),
+                    ->maxSize(4096),
                 Forms\Components\TextInput::make('noTelp')
                     ->label('No. Telp'),
                 Forms\Components\TextInput::make('totalMasaKerja')
@@ -145,12 +145,19 @@ class ProfilePegawaiResource extends Resource
                     ->searchable(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-            ])
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\Action::make('tambah-tugas')
+                        ->label('Tambah Tugas')
+                        ->icon('heroicon-o-plus')
+                        ->url(fn(Profile $record): string => CreateTugasTambahan::getUrl(['record' => $record->id])),
+                    Tables\Actions\Action::make('tambah-mapel')
+                        ->label('Tambah Tugas Mapel')
+                        ->icon('heroicon-o-plus')
+                        ->url(fn(Profile $record): string => CreateTugasMapel::getUrl(['record' => $record->id]))
+                ])
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 
@@ -172,6 +179,8 @@ class ProfilePegawaiResource extends Resource
         return [
             'index' => Pages\ListProfilePegawais::route('/'),
             'view' => Pages\ViewProfile::route('/{record}'),
+            'tambah-tugas' => Pages\CreateTugasTambahan::route('/{record}/tambah-tugas'),
+            'tambah-mapel' => Pages\CreateTugasMapel::route('/{record}/tambah-mapel'),
         ];
     }
 }

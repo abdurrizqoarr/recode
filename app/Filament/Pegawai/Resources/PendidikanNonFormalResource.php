@@ -40,14 +40,17 @@ class PendidikanNonFormalResource extends Resource
                 Forms\Components\TextInput::make('lembagaPenyelenggara')
                     ->label('Lembaga Penyelenggara')
                     ->required()
+                    ->minLength(5)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('namaKursus')
                     ->label('Nama Kursus')
                     ->required()
+                    ->minLength(5)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('tingkat')
                     ->label('Tingkat')
                     ->required()
+                    ->minLength(5)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('tahunLulus')
                     ->label('Tahun Lulus')

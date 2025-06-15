@@ -4,7 +4,14 @@ namespace App\Filament\Pegawai\Pages;
 
 use App\Models\Profile as ModelsProfile;
 use App\Models\RiwayatPekerjaan;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -24,79 +31,95 @@ class Profile extends Page implements HasForms
 
     public ?array $data = [];
 
+    public ?ModelsProfile $record = null;
+
     public function mount(): void
     {
         $user = Auth::guard('pegawais')->user();
 
-        $profile = ModelsProfile::where('id_pegawai', $user->id)->first();
+        // Find the existing profile for the user, or create a new, unsaved instance.
+        // This ensures `$this->record` is always a valid model instance.
+        $this->record = ModelsProfile::firstOrNew(['id_pegawai' => $user->id]);
 
-        if ($profile) {
-            $this->form->fill($profile->toArray());
-        }
+        // Fill the form with the record's data.
+        $this->form->fill($this->record->toArray());
     }
 
     public function form(Form $form): Form
     {
-        return $form->schema([
-            \Filament\Forms\Components\Section::make('Profil')
-                ->schema([
-                    Grid::make(2)->schema([
-                        \Filament\Forms\Components\TextInput::make('noKTAM')
-                            ->label('No. KTAM')
-                            ->required()
-                            ->unique(ignoreRecord: true),
-                        \Filament\Forms\Components\TextInput::make('noKTP')
-                            ->label('No. KTP')
-                            ->required()
-                            ->unique(ignoreRecord: true),
-                        \Filament\Forms\Components\TextInput::make('noNIPY')
-                            ->label('No. NIPY')
-                            ->required()
-                            ->unique(ignoreRecord: true),
-                        \Filament\Forms\Components\TextInput::make('tempatLahir')
-                            ->label('Tempat Lahir')
-                            ->required(),
-                        \Filament\Forms\Components\Radio::make('isMarried')
-                            ->label('Sudah Menikah')
-                            ->options([
-                                true => 'Ya',
-                                false => 'Tidak',
-                            ])
-                            ->boolean()
-                            ->default(false),
-                        \Filament\Forms\Components\Select::make('jenisKelamin')
-                            ->label('Jenis Kelamin')
-                            ->options([
-                                'Laki - Laki' => 'Laki - Laki',
-                                'Perempuan' => 'Perempuan',
-                            ])
-                            ->required(),
-                        \Filament\Forms\Components\DatePicker::make('tanggalLahir')
-                            ->label('Tanggal Lahir')
-                            ->required(),
-                        \Filament\Forms\Components\Textarea::make('alamat')
-                            ->label('Alamat')
-                            ->required()
-                            ->columnSpanFull(),
-                        \Filament\Forms\Components\FileUpload::make('fotoProfile')
-                            ->label('Foto Profil')
-                            ->image()
-                            ->disk('public')
-                            ->previewable()
-                            ->directory('profile-photos')
-                            ->maxSize(3072) // maksimal 3MB (dalam kilobyte)
-                            ->nullable(),
-                        \Filament\Forms\Components\TextInput::make('noTelp')
-                            ->label('No. Telepon')
-                            ->tel()
-                            ->nullable(),
-                    ])
-                ])
-        ])->statePath('data');
+        return $form
+            ->schema([
+                Section::make('Profil')
+                    ->schema([
+                        Grid::make(2)->schema([
+                            TextInput::make('noKTAM')
+                                ->label('No. KTAM')
+                                ->maxLength(50),
+                            TextInput::make('noKTP')
+                                ->label('No. KTP')
+                                ->maxLength(16),
+                            TextInput::make('noNIPY')
+                                ->label('No. NIPY')
+                                ->maxLength(50),
+                            TextInput::make('tempatLahir')
+                                ->label('Tempat Lahir')
+                                ->required()
+                                ->maxLength(100),
+                            Radio::make('isMarried')
+                                ->label('Sudah Menikah')
+                                ->options([
+                                    true => 'Ya',
+                                    false => 'Tidak',
+                                ])
+                                ->boolean()
+                                ->default(false)
+                                ->required(),
+                            Select::make('jenisKelamin')
+                                ->label('Jenis Kelamin')
+                                ->options([
+                                    'Laki - Laki' => 'Laki - Laki',
+                                    'Perempuan' => 'Perempuan',
+                                ])
+                                ->required(),
+                            DatePicker::make('tanggalLahir')
+                                ->label('Tanggal Lahir')
+                                ->required()
+                                ->before('today'),
+                            Textarea::make('alamat')
+                                ->label('Alamat')
+                                ->required()
+                                ->maxLength(255)
+                                ->columnSpanFull(),
+                            FileUpload::make('fotoProfile')
+                                ->label('Foto Profil')
+                                ->image()
+                                ->disk('public')
+                                ->directory('profile-photos')
+                                ->maxSize(3072) // maksimal 3MB (dalam kilobyte)
+                                ->nullable()
+                                ->imagePreviewHeight('150')
+                                ->imageCropAspectRatio('1:1')
+                                ->imageResizeTargetWidth('300')
+                                ->imageResizeTargetHeight('300'),
+                            TextInput::make('noTelp')
+                                ->label('No. Telepon')
+                                ->tel()
+                                ->numeric()
+                                ->minLength(10)
+                                ->maxLength(15)
+                                ->nullable(),
+                        ]),
+                    ]),
+            ])
+            ->statePath('data')
+            // KEY CHANGE: Bind the form to the Eloquent model instance.
+            // This allows `ignoreRecord: true` to know which record to exclude.
+            ->model($this->record);
     }
 
     public function submit()
     {
+        $data = $this->form->getState();
         try {
             $user = Auth::guard('pegawais')->user();
 
@@ -104,10 +127,10 @@ class Profile extends Page implements HasForms
                 ->sum('masaKerjaDalamBulan');
 
             ModelsProfile::updateOrCreate(
-                ['id_pegawai' => $user->id], // Kunci untuk mencari
+                ['id_pegawai' => $user->id],
                 [
-                    ...$this->form->getState(), // Data dari form
-                    'totalMasaKerja' => $totalMasaKerja, // Data hasil kalkulasi
+                    ...$data,
+                    'totalMasaKerja' => $totalMasaKerja,
                 ]
             );
 
@@ -117,7 +140,6 @@ class Profile extends Page implements HasForms
                 ->success()
                 ->send();
         } catch (\Throwable $e) {
-            // 4. Tangani error dengan aman
             Log::error('Gagal memperbarui profil pegawai: ' . $e->getMessage(), ['user_id' => $user->id ?? null]);
 
             Notification::make()

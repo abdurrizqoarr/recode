@@ -14,9 +14,9 @@ class PendidikanNonFormalExporter extends Exporter
     public static function getColumns(): array
     {
         return [
-            ExportColumn::make('pegawaiAum.name')
+            ExportColumn::make('pegawai.name')
                 ->label('Nama'),
-            ExportColumn::make('pegawaiAum.aum.namaAum')
+            ExportColumn::make('pegawai.aum.namaAum')
                 ->label('Asal AUM'),
             ExportColumn::make('lembagaPenyelenggara')
                 ->label('Lembaga Penyelenggata'),

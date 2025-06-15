@@ -4,6 +4,8 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pegawai\Pages\LoginPegawai;
 use App\Filament\Pegawai\Pages\Profile;
+use App\Filament\Pegawai\Pages\TugasPokok;
+use App\Filament\Pegawai\Pages\UserSetting;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -37,8 +39,9 @@ class PegawaiPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Pegawai/Resources'), for: 'App\\Filament\\Pegawai\\Resources')
             ->discoverPages(in: app_path('Filament/Pegawai/Pages'), for: 'App\\Filament\\Pegawai\\Pages')
             ->pages([
-                Pages\Dashboard::class,
                 Profile::class,
+                TugasPokok::class,
+                UserSetting::class
             ])
             ->discoverWidgets(in: app_path('Filament/Pegawai/Widgets'), for: 'App\\Filament\\Pegawai\\Widgets')
             ->widgets([

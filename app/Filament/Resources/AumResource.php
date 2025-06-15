@@ -4,11 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Exports\AumExporter;
 use App\Filament\Resources\AumResource\Pages;
-use App\Filament\Resources\AumResource\RelationManagers;
 use App\Models\Aum;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
-use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,8 +14,6 @@ use Filament\Tables;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AumResource extends Resource
 {

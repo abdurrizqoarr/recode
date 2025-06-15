@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\AdminAum\Pages\AdminAumDashboard;
 use App\Filament\AdminAum\Pages\LoginAdminAum;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -37,7 +38,7 @@ class AdminAumPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/AdminAum/Resources'), for: 'App\\Filament\\AdminAum\\Resources')
             ->discoverPages(in: app_path('Filament/AdminAum/Pages'), for: 'App\\Filament\\AdminAum\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                AdminAumDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/AdminAum/Widgets'), for: 'App\\Filament\\AdminAum\\Widgets')
             ->widgets([

@@ -52,6 +52,7 @@ class PendidikanFormalResource extends Resource
 
                 Forms\Components\TextInput::make('lembagaPendidikan')
                     ->label('Lembaga Pendidikan')
+                    ->minLength(5)
                     ->required()
                     ->maxLength(255),
 

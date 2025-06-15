@@ -25,18 +25,28 @@ class RiwayatPekerjaanCreate extends CreateRecord
             ->schema([
                 \Filament\Forms\Components\TextInput::make('namaAum')
                     ->label('Nama AUM')
+                    ->maxLength(240)
+                    ->minLength(5)
                     ->required(),
                 \Filament\Forms\Components\TextInput::make('nomerAum')
                     ->label('Nomor AUM')
+                    ->maxLength(240)
+                    ->minLength(5)
                     ->required(),
                 \Filament\Forms\Components\TextInput::make('namaPenandatangan')
                     ->label('Nama Penandatangan SK')
+                    ->maxLength(240)
+                    ->minLength(5)
                     ->required(),
                 \Filament\Forms\Components\TextInput::make('jabatanPenandaTangan')
                     ->label('Jabatan Penandatangan')
+                    ->maxLength(240)
+                    ->minLength(5)
                     ->required(),
                 \Filament\Forms\Components\TextInput::make('nomerSK')
                     ->label('Nomor SK')
+                    ->maxLength(240)
+                    ->minLength(5)
                     ->columnSpanFull()
                     ->required(),
                 \Filament\Forms\Components\DatePicker::make('tanggalMulaiSK')
@@ -50,6 +60,8 @@ class RiwayatPekerjaanCreate extends CreateRecord
                 \Filament\Forms\Components\FileUpload::make('buktiSK')
                     ->label('Bukti SK')
                     ->required()
+                    ->directory('sk-riwayat')
+                    ->disk('local')
                     ->acceptedFileTypes(['application/pdf'])
                     ->maxSize(4096),
             ]);

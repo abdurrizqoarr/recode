@@ -101,10 +101,11 @@ class PendidikanFormalResource extends Resource
                     ->toggleable(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('id_aum')
+                Tables\Filters\SelectFilter::make('aum')
                     ->label('AUM')
+                    ->relationship('pegawai.aum', 'namaAum')
                     ->options(\App\Models\Aum::all()->pluck('namaAum', 'id'))
-                    ->searchable(),
+                    ->searchable()
             ])
             ->actions([
                 Tables\Actions\DeleteAction::make(),
@@ -123,8 +124,6 @@ class PendidikanFormalResource extends Resource
     {
         return [
             'index' => Pages\ListPendidikanFormals::route('/'),
-            'create' => Pages\CreatePendidikanFormal::route('/create'),
-            'edit' => Pages\EditPendidikanFormal::route('/{record}/edit'),
         ];
     }
 }

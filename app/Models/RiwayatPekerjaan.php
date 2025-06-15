@@ -15,7 +15,6 @@ class RiwayatPekerjaan extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id',
         'namaAum',
         'nomerAum',
         'namaPenandatangan',

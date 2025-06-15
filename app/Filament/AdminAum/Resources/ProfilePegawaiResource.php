@@ -3,17 +3,17 @@
 namespace App\Filament\AdminAum\Resources;
 
 use App\Filament\AdminAum\Resources\ProfilePegawaiResource\Pages;
-use App\Filament\AdminAum\Resources\ProfilePegawaiResource\RelationManagers;
+use App\Filament\AdminAum\Resources\ProfilePegawaiResource\Pages\CreateTugasMapel;
+use App\Filament\AdminAum\Resources\ProfilePegawaiResource\Pages\CreateTugasTambahan;
 use App\Models\Profile;
-use App\Models\ProfilePegawai;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 
 class ProfilePegawaiResource extends Resource
@@ -133,9 +133,18 @@ class ProfilePegawaiResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ViewAction::make(),
-            ])
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\Action::make('tambah-tugas')
+                        ->label('Tambah Tugas')
+                        ->icon('heroicon-o-plus')
+                        ->url(fn(Profile $record): string => CreateTugasTambahan::getUrl(['record' => $record->id])),
+                    Tables\Actions\Action::make('tambah-mapel')
+                        ->label('Tambah Tugas Mapel')
+                        ->icon('heroicon-o-plus')
+                        ->url(fn(Profile $record): string => CreateTugasMapel::getUrl(['record' => $record->id]))
+                ])
+            ], position: ActionsPosition::BeforeColumns)
             ->bulkActions([]);
     }
 
@@ -157,6 +166,8 @@ class ProfilePegawaiResource extends Resource
         return [
             'index' => Pages\ListProfilePegawais::route('/'),
             'view' => Pages\DetailProfileAnggota::route('/{record}'),
+            'tambah-tugas' => Pages\CreateTugasTambahan::route('/{record}/tambah-tugas'),
+            'tambah-mapel' => Pages\CreateTugasMapel::route('/{record}/tambah-mapel'),
         ];
     }
 }

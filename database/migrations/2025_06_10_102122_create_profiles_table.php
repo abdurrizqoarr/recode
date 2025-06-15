@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('profile', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('noKTAM')->unique();
-            $table->string('noKTP')->unique();
-            $table->string('noNIPY')->unique();
+            $table->string('noKTAM')->nullable(true);
+            $table->string('noKTP')->nullable(true);
+            $table->string('noNIPY')->nullable(true);
             $table->string('tempatLahir');
             $table->enum('jenisKelamin', ['Laki - Laki', 'Perempuan']);
             $table->date('tanggalLahir');
