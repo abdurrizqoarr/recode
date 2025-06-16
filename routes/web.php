@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Middleware\MultiGuardAuth;
 use App\Livewire\HomePage;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -21,4 +22,5 @@ Route::get('/download/{filename}', function ($path) {
     }
 
     return response()->download($fullPath);
-})->where('filename', '.*')->name('download.document');
+})->where('filename', '.*')->name('download.document')
+    ->middleware(MultiGuardAuth::class);
