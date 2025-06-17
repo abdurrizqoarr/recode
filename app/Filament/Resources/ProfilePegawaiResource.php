@@ -139,9 +139,9 @@ class ProfilePegawaiResource extends Resource
                 Tables\Columns\TextColumn::make('totalMasaKerja')->label('Total Masa Kerja'),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('id_aum')
+                Tables\Filters\SelectFilter::make('pegawaiAum.id_aum') // sesuaikan dengan nama relasi dan kolom relasinya
                     ->label('AUM')
-                    ->options(\App\Models\Aum::all()->pluck('namaAum', 'id'))
+                    ->relationship('pegawaiAum.aum', 'namaAum') // sesuaikan dengan nama relasi di model
                     ->searchable(),
             ])
             ->actions([
@@ -157,8 +157,7 @@ class ProfilePegawaiResource extends Resource
                         ->url(fn(Profile $record): string => CreateTugasMapel::getUrl(['record' => $record->id]))
                 ])
             ], position: ActionsPosition::BeforeColumns)
-            ->bulkActions([
-            ]);
+            ->bulkActions([]);
     }
 
     public static function getEloquentQuery(): Builder
