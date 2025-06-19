@@ -23,17 +23,20 @@ class TugasPokokPegawaiResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $modelLabel = 'Tugas Pokok Pegawai';
-    protected static ?string $pluralModelLabel = 'Tugas Pokok Pegawai';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationGroup = 'Penugasan';
+
+    protected static ?string $modelLabel = 'Tugas Pokok PTK';
+    protected static ?string $pluralModelLabel = 'Tugas Pokok PTK';
 
     public static function getLabel(): ?string
     {
-        return 'Tugas Pokok Pegawai';
+        return 'Tugas Pokok PTK';
     }
 
     public static function getPluralLabel(): ?string
     {
-        return 'Tugas Pokok Pegawai';
+        return 'Tugas Pokok PTK';
     }
 
     public static function form(Form $form): Form

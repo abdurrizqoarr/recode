@@ -21,6 +21,9 @@ class RiwayatPekerjaanResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Penugasan';
+
     protected static ?string $modelLabel = 'Riwayat Pekerjaan';
     protected static ?string $pluralModelLabel = 'Riwayat Pekerjaan';
 

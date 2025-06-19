@@ -19,8 +19,12 @@ class UserSettings extends Page implements HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?string $navigationLabel = 'User Setting';
 
     protected static string $view = 'filament.pegawai.pages.user-setting';
+
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Dashboard';
 
     public ?array $data = [];
 

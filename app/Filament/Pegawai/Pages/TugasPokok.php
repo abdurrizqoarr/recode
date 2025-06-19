@@ -21,6 +21,9 @@ class TugasPokok extends Page implements HasForms
 
     protected static string $view = 'filament.pegawai.pages.tugas-pokok';
 
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationGroup = 'Penugasan';
+
     public ?array $data = [];
 
     public $file = '';
@@ -30,9 +33,9 @@ class TugasPokok extends Page implements HasForms
         $user = Auth::guard('pegawais')->user();
 
         $tugasPokok = TugasPokokModel::where('id_pegawai', $user->id)->first();
-        $this->file = $tugasPokok->buktiSK;
 
         if ($tugasPokok) {
+            $this->file = $tugasPokok->buktiSK;
             $this->form->fill($tugasPokok->toArray());
         }
     }

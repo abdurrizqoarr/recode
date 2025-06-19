@@ -17,9 +17,12 @@ use Filament\Tables\Table;
 
 class AumResource extends Resource
 {
-    protected static ?string $model = Aum::class;
+    protected static ?string $model = AUM::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'fas-school-flag';
+
+    protected static ?int $navigationSort = 3;
+    protected static ?string $navigationGroup = 'Dashboard';
 
     protected static ?string $navigationLabel = 'AUM';
 
@@ -41,29 +44,29 @@ class AumResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('namaAum')
-                    ->label('Nama Aum')
+                    ->label('Nama AUM')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('npsm')
-                    ->label('NPSM')
+                    ->label('NPSN')
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255),
                 Forms\Components\TextInput::make('alamatAum')
-                    ->label('Alamat Aum')
+                    ->label('Alamat AUM')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('teleponAum')
-                    ->label('Telepon Aum')
+                    ->label('Telepon AUM')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('emailAum')
-                    ->label('Email Aum')
+                    ->label('Email AUM')
                     ->email()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('websiteAum')
-                    ->label('Website Aum')
+                    ->label('Website AUM')
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('logoAum')
-                    ->label('Logo Aum')
+                    ->label('Logo AUM')
                     ->image()
                     ->directory('logos')
                     ->disk('public')
@@ -87,27 +90,27 @@ class AumResource extends Resource
             ])
             ->columns([
                 Tables\Columns\TextColumn::make('namaAum')
-                    ->label('Nama Aum')
+                    ->label('Nama AUM')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('npsm')
-                    ->label('NPSM')
+                    ->label('NPSN')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('alamatAum')
-                    ->label('Alamat Aum')
+                    ->label('Alamat AUM')
                     ->limit(30),
                 Tables\Columns\TextColumn::make('teleponAum')
-                    ->label('Telepon Aum')
+                    ->label('Telepon AUM')
                     ->limit(20),
                 Tables\Columns\TextColumn::make('emailAum')
-                    ->label('Email Aum')
+                    ->label('Email AUM')
                     ->limit(30),
                 Tables\Columns\TextColumn::make('websiteAum')
-                    ->label('Website Aum')
+                    ->label('Website AUM')
                     ->limit(30),
                 Tables\Columns\ImageColumn::make('logoAum')
-                    ->label('Logo Aum')
+                    ->label('Logo AUM')
                     ->size(60)
                     ->circular()
                     ->alignCenter(),

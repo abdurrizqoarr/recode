@@ -13,12 +13,16 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class TugasMapelResource extends Resource
 {
     protected static ?string $model = TugasMapel::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?int $navigationSort = 3;
+    protected static ?string $navigationGroup = 'Penugasan';
 
     protected static ?string $modelLabel = 'Tugas Mapel';
     protected static ?string $pluralModelLabel = 'Tugas Mapel';
@@ -54,6 +58,10 @@ class TugasMapelResource extends Resource
                     ->label('Total Jam / Minggu')
                     ->sortable(),
             ])
+            ->query(function () {
+                $idUser = Auth::guard('pegawais')->id();
+                return TugasMapel::query()->where('id_pegawai', $idUser);
+            })
             ->filters([])
             ->actions([])
             ->bulkActions([]);

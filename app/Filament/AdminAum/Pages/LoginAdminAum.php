@@ -39,11 +39,11 @@ class LoginAdminAum extends Login
 
     public function getTitle(): string
     {
-        return 'Login Pegawai';
+        return 'Login ADMIN AUM';
     }
 
     public function getHeading(): string
     {
-        return 'Silakan Masuk ke Akun Pegawai Anda';
+        return 'Silakan Masuk ke Akun ADMIN AUM Anda';
     }
 }

@@ -20,6 +20,9 @@ class PendidikanNonFormalResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Pendidikan';
+
     protected static ?string $modelLabel = 'Pendidikan Non Formal';
     protected static ?string $pluralModelLabel = 'Pendidikan Non Formal';
 

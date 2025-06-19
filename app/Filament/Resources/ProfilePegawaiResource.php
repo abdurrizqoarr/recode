@@ -24,6 +24,9 @@ class ProfilePegawaiResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationGroup = 'PTK';
+
     protected static ?string $navigationLabel = 'Profile Anggota';
 
     protected static ?string $modelLabel = 'Profile Anggota';
@@ -136,7 +139,18 @@ class ProfilePegawaiResource extends Resource
                 Tables\Columns\TextColumn::make('alamat')->label('Alamat')->limit(30),
                 Tables\Columns\ImageColumn::make('fotoProfile')->label('Foto')->circular(),
                 Tables\Columns\TextColumn::make('noTelp')->label('No. Telp'),
-                Tables\Columns\TextColumn::make('totalMasaKerja')->label('Total Masa Kerja'),
+                Tables\Columns\TextColumn::make('totalMasaKerja')
+                    ->label('Total Masa Kerja')
+                    ->formatStateUsing(function ($state): string {
+                        if (is_null($state) || !is_numeric($state) || $state < 0) {
+                            return '0 tahun 0 bulan';
+                        }
+
+                        $tahun = floor($state / 12);
+                        $bulan = $state % 12;
+
+                        return "{$tahun} tahun {$bulan} bulan";
+                    }),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('pegawaiAum.id_aum') // sesuaikan dengan nama relasi dan kolom relasinya
@@ -148,11 +162,11 @@ class ProfilePegawaiResource extends Resource
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\Action::make('tambah-tugas')
-                        ->label('Tambah Tugas')
+                        ->label('Tugas Tambahan')
                         ->icon('heroicon-o-plus')
                         ->url(fn(Profile $record): string => CreateTugasTambahan::getUrl(['record' => $record->id])),
                     Tables\Actions\Action::make('tambah-mapel')
-                        ->label('Tambah Tugas Mapel')
+                        ->label('Tugas Mapel')
                         ->icon('heroicon-o-plus')
                         ->url(fn(Profile $record): string => CreateTugasMapel::getUrl(['record' => $record->id]))
                 ])

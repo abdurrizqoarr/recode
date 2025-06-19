@@ -17,8 +17,11 @@ class PegawaiAumResource extends Resource
 {
     protected static ?string $model = PegawaiAum::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'fas-user-plus';
     protected static ?string $navigationLabel = 'Pegawai AUM';
+
+    protected static ?int $navigationSort = 5;
+    protected static ?string $navigationGroup = 'Dashboard';
 
     protected static ?string $modelLabel = 'Pegawai AUM';
     protected static ?string $pluralModelLabel = 'Pegawai AUM';

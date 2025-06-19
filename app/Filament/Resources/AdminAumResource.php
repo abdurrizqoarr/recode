@@ -16,9 +16,12 @@ class AdminAumResource extends Resource
 {
     protected static ?string $model = AdminAum::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'fas-user-plus';
 
     protected static ?string $navigationLabel = 'Admin AUM';
+
+    protected static ?int $navigationSort = 4;
+    protected static ?string $navigationGroup = 'Dashboard';
 
     protected static ?string $modelLabel = 'Admin AUM';
     protected static ?string $pluralModelLabel = 'Admin AUM';

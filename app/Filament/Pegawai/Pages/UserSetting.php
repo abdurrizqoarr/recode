@@ -23,6 +23,9 @@ class UserSetting extends Page implements HasForms
 
     protected static string $view = 'filament.pegawai.pages.user-setting';
 
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'PTK';
+
     public ?array $data = [];
 
     public ?PegawaiAum $record = null;

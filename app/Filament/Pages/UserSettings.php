@@ -16,7 +16,11 @@ class UserSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Dashboard';
+    protected static ?string $navigationLabel = 'User Setting';
+
+    protected static ?string $navigationIcon = 'fas-user-cog';
 
     protected static string $view = 'filament.pages.user-settings';
 

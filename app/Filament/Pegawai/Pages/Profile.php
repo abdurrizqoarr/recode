@@ -29,6 +29,9 @@ class Profile extends Page implements HasForms
 
     protected static string $view = 'filament.pegawai.pages.profile';
 
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationGroup = 'PTK';
+
     public ?array $data = [];
 
     public ?ModelsProfile $record = null;

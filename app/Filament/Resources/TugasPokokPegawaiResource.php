@@ -25,17 +25,20 @@ class TugasPokokPegawaiResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $modelLabel = 'Tugas Pokok Pegawai';
-    protected static ?string $pluralModelLabel = 'Tugas Pokok Pegawai';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationGroup = 'Penugasan';
+
+    protected static ?string $modelLabel = 'Tugas Pokok PTK';
+    protected static ?string $pluralModelLabel = 'Tugas Pokok PTK';
 
     public static function getLabel(): ?string
     {
-        return 'Tugas Pokok Pegawai';
+        return 'Tugas Pokok PTK';
     }
 
     public static function getPluralLabel(): ?string
     {
-        return 'Tugas Pokok Pegawai';
+        return 'Tugas Pokok PTK';
     }
 
     public static function form(Form $form): Form
@@ -95,8 +98,6 @@ class TugasPokokPegawaiResource extends Resource
                     ->required()
                     ->label("Nomer SK Tugas Pokok"),
                 DatePicker::make('tanggalSK')
-                    ->minLength(2)
-                    ->maxLength(240)
                     ->required()
                     ->label("Tangal SK Tugas Pokok"),
                 Forms\Components\FileUpload::make('buktiSK')

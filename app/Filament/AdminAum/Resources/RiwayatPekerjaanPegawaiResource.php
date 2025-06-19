@@ -17,17 +17,20 @@ class RiwayatPekerjaanPegawaiResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $modelLabel = 'Riwayat Pekerjaan Pegawai';
-    protected static ?string $pluralModelLabel = 'Riwayat Pekerjaan Pegawai';
+    protected static ?string $modelLabel = 'Riwayat Pekerjaan PTK';
+    protected static ?string $pluralModelLabel = 'Riwayat Pekerjaan PTK';
+
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Penugasan';
 
     public static function getLabel(): ?string
     {
-        return 'Riwayat Pekerjaan Pegawai';
+        return 'Riwayat Pekerjaan PTK';
     }
 
     public static function getPluralLabel(): ?string
     {
-        return 'Riwayat Pekerjaan Pegawai';
+        return 'Riwayat Pekerjaan PTK';
     }
 
     public static function canEdit(Model $record): bool

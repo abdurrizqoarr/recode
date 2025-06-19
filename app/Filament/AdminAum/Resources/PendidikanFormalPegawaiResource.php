@@ -17,6 +17,9 @@ class PendidikanFormalPegawaiResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'PTK';
+
     protected static ?string $modelLabel = 'Pendidikan Formal Anggota';
     protected static ?string $pluralModelLabel = 'Pendidikan Formal Anggota';
 

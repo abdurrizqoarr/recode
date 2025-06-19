@@ -10,6 +10,9 @@ use Filament\Pages\Page;
 
 class AdminAumDashboard extends Page
 {
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationGroup = 'Dashboard';
+    protected static ?string $navigationLabel = 'Dashboard';
     protected static ?string $navigationIcon = 'heroicon-o-home';
 
     protected static string $view = 'filament.admin-aum.pages.admin-aum-dashboard';
